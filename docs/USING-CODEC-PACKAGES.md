@@ -2,6 +2,16 @@
 
 ## Install From a Private Feed
 
+The prebuilt CEF 134 Windows x64 NuGet source is available from the [GitHub
+Release](https://github.com/TrumpCat/WebView-Avalonia/releases/tag/cef-134.3.9-codecs.1-win-x64).
+Download [cef-134-win-x64-nuget.zip](https://github.com/TrumpCat/WebView-Avalonia/releases/download/cef-134.3.9-codecs.1-win-x64/cef-134-win-x64-nuget.zip),
+extract it, and add the extracted folder as a local source:
+
+```powershell
+Expand-Archive .\cef-134-win-x64-nuget.zip -DestinationPath C:\nuget\cef134
+dotnet nuget add source C:\nuget\cef134 --name CEF134Codecs
+```
+
 Configure the feed and install the top-level package:
 
 ```powershell
@@ -13,6 +23,17 @@ dotnet add package WebViewControl-Avalonia `
 
 The package brings in the matching CEF runtime, CefGlue packages and
 browser-process executable. Do not mix package versions from another CEF line.
+
+The ZIP is only a transport container. NuGet needs the extracted directory,
+which contains these packages:
+
+```text
+chromiumembeddedframework.runtime.134.3.9-codecs.1.nupkg
+chromiumembeddedframework.runtime.win-x64.134.3.9-codecs.1.nupkg
+CefGlue.Common.134.6998.178-9n1m.1.nupkg
+CefGlue.Avalonia.134.6998.178-9n1m.1.nupkg
+WebViewControl-Avalonia.3.134.178-codecs.1.nupkg
+```
 
 ## Project File
 
@@ -75,3 +96,17 @@ Collect `chrome://gpu` output and the CEF log when diagnosing a failure.
 Use CEF 134 for supported current Windows systems and .NET 8. Use CEF 106
 only for the Windows 7 compatibility line and .NET 6. The lines have separate
 runtime, CefGlue and WebView package versions and must not be combined.
+
+## Run The Prebuilt Demo
+
+Download the [compiled Demo](https://github.com/TrumpCat/WebView-Avalonia/releases/download/cef-134.3.9-codecs.1-win-x64/html5test-demo-win-x64.tar.gz),
+extract it, and run:
+
+```powershell
+New-Item -ItemType Directory -Force .\cef134-demo | Out-Null
+tar -xzf .\html5test-demo-win-x64.tar.gz -C .\cef134-demo
+Start-Process .\cef134-demo\SampleWebView.Avalonia.exe
+```
+
+Keep all files in the extracted directory, including `libcef.dll`, `.pak`
+resources, `locales` and `CefGlueBrowserProcess\9n1m.webview.exe`.

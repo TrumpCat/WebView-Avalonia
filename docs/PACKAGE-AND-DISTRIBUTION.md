@@ -82,9 +82,48 @@ Upload the ZIP and its SHA-256 value to a GitHub Release for the matching
 source revision. The source PR should document the Release URL and package
 version after the Release is created.
 
+The current CEF 134 Windows x64 assets are available here:
+
+- [NuGet feed ZIP](https://github.com/TrumpCat/WebView-Avalonia/releases/download/cef-134.3.9-codecs.1-win-x64/cef-134-win-x64-nuget.zip)
+- [Compiled Demo](https://github.com/TrumpCat/WebView-Avalonia/releases/download/cef-134.3.9-codecs.1-win-x64/html5test-demo-win-x64.tar.gz)
+- [NuGet + Demo bundle](https://github.com/TrumpCat/WebView-Avalonia/releases/download/cef-134.3.9-codecs.1-win-x64/cef-134-win-x64-bundle.zip)
+- [SHA-256 checksums](https://github.com/TrumpCat/WebView-Avalonia/releases/download/cef-134.3.9-codecs.1-win-x64/cef-134-win-x64-SHA256SUMS.txt)
+
+The assets are hosted on the builder fork because the current GitHub account
+does not have direct write permission to `Timskt/WebView-Avalonia`. The PR
+targets that repository's `feature/h264-h265-codecs` branch.
+
+## Download And Install
+
+To use the NuGet packages, download `cef-134-win-x64-nuget.zip`, extract it,
+and register the extracted directory as a local NuGet source:
+
+```powershell
+Expand-Archive .\cef-134-win-x64-nuget.zip -DestinationPath C:\nuget\cef134
+dotnet nuget add source C:\nuget\cef134 --name CEF134Codecs
+dotnet add package WebViewControl-Avalonia `
+  --version 3.134.178-codecs.1 `
+  --source CEF134Codecs
+```
+
+The extracted directory must contain all five `.nupkg` files. Do not point
+NuGet at the ZIP file itself.
+
+To run the compiled Demo, download `html5test-demo-win-x64.tar.gz`, extract it
+with 7-Zip or Windows `tar`, then run the executable from the extracted folder:
+
+```powershell
+New-Item -ItemType Directory -Force .\cef134-demo | Out-Null
+tar -xzf .\html5test-demo-win-x64.tar.gz -C .\cef134-demo
+Start-Process .\cef134-demo\SampleWebView.Avalonia.exe
+```
+
+The Demo is a CEF 134 `win-x64` build. Use it on a Windows x64 machine and
+keep the entire extracted directory together.
+
 ## Demo
 
-Extract the demo ZIP on a Windows x64 machine and run:
+Extract the Demo archive on a Windows x64 machine and run:
 
 ```powershell
 .\SampleWebView.Avalonia.exe
